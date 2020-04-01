@@ -15,10 +15,10 @@ if (!BASKET_URL) {
 const fetchInterval = parseInt(FETCH_INTERVAL, 10);
 const getFetchInterval = () => MIN_FETCH_INTERVAL > fetchInterval ? MIN_FETCH_INTERVAL : fetchInterval;
 
-const fetchHandler = () => {
-    const basket: Promise<BasketItem[]> = getBasket(BASKET_URL);
+const fetchHandler = async () => {
+    const basket: BasketItem[] = await getBasket(BASKET_URL);
     const date = (new Date()).toUTCString();
-    basket.then((basket: BasketItem[]) => console.log(basket, `, length => ${basket.length}, date => ${date}`));
+    console.log(basket, `, length => ${basket.length}, date => ${date}`);
 };
 
 const timeout = setInterval(fetchHandler, getFetchInterval());
