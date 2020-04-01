@@ -1,29 +1,37 @@
 
-import { config } from 'dotenv'
-import axios, { AxiosResponse} from 'axios';
-import { parse } from 'fast-xml-parser';
-import { BasketItem, ListItem } from './BasketItem';
+import { config } from 'dotenv';
+import { getBasket} from './basket';
+import { BasketItem } from '.';
 
 config();
-const { BASKET_URL } = process.env;
+
+const MIN_FETCH_INTERVAL = 60000;
+const { BASKET_URL, FETCH_INTERVAL = '900000' } = process.env;
 
 if (!BASKET_URL) {
     throw new TypeError(`Valid basket URL must be configured, found => "${BASKET_URL}"`);
 }
 
-const normalizer = (list: ListItem[]): BasketItem[] => {
-    return list.map((item: ListItem): BasketItem => {
-        const { '@_data': data, '@_val': val } = item;
-        return { timestamp: new Date(data), value: parseFloat(val)};
-    });
+const fetchInterval = parseInt(FETCH_INTERVAL, 10);
+const getFetchInterval = () => MIN_FETCH_INTERVAL > fetchInterval ? MIN_FETCH_INTERVAL : fetchInterval;
+
+const fetchHandler = () => {
+    const basket: Promise<BasketItem[]> = getBasket(BASKET_URL);
+    const date = (new Date()).toUTCString();
+    basket.then((basket: BasketItem[]) => console.log(basket, `, length => ${basket.length}, date => ${date}`));
 };
 
-const basket: Promise<BasketItem[]> = axios.get(BASKET_URL)
-    .then(({ data }: AxiosResponse<string>): BasketItem[] => {
-        const { Basket: { BasketList: list}} = parse(data, {ignoreAttributes: false});
-        console.log(`basket length => ${list.length}`);
-        return normalizer(list);
-    })
-;
+const timeout = setInterval(fetchHandler, getFetchInterval());
+console.log('scheduled with interval => ', getFetchInterval());
 
-basket.then((basket: BasketItem[]) => console.log(basket));
+process.on('SIGTERM', () => {
+    console.log('Process terminated.')
+    clearInterval(timeout);
+});
+
+process.on('SIGINT', () => {
+    console.log("Caught interrupt signal");
+    clearInterval(timeout);
+});
+
+setImmediate(fetchHandler);
