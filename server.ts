@@ -1,37 +1,20 @@
 
-import { config } from 'dotenv';
-import { getBasket} from './basket';
-import { BasketItem } from '.';
+import express, { Express } from 'express';
+import { Server } from 'http';
+import { router as basketRouter } from './routes/basket';
 
-config();
+const app: Express = express();
 
-const MIN_FETCH_INTERVAL = 60000;
-const { BASKET_URL, FETCH_INTERVAL = '900000' } = process.env;
-
-if (!BASKET_URL) {
-    throw new TypeError(`Valid basket URL must be configured, found => "${BASKET_URL}"`);
-}
-
-const fetchInterval = parseInt(FETCH_INTERVAL, 10);
-const getFetchInterval = () => MIN_FETCH_INTERVAL > fetchInterval ? MIN_FETCH_INTERVAL : fetchInterval;
-
-const fetchHandler = async () => {
-    const basket: BasketItem[] = await getBasket(BASKET_URL);
-    const date = (new Date()).toUTCString();
-    console.log(basket, `, length => ${basket.length}, date => ${date}`);
-};
-
-const timeout = setInterval(fetchHandler, getFetchInterval());
-console.log('scheduled with interval => ', getFetchInterval());
+app.use(express.json());
+app.use('/basket', basketRouter);
+const server: Server = app.listen(3000, () => console.log('server started'));
 
 process.on('SIGTERM', () => {
     console.log('Process terminated.')
-    clearInterval(timeout);
+    server.close();
 });
 
 process.on('SIGINT', () => {
     console.log("Caught interrupt signal");
-    clearInterval(timeout);
+    server.close();
 });
-
-setImmediate(fetchHandler);

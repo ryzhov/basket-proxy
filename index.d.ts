@@ -1,6 +1,6 @@
 
-export interface BasketItem {
-    timestamp: Date;
+export interface BasketItemDTO {
+    timestamp: number;
     value: number;
 }
 

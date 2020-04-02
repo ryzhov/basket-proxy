@@ -1,17 +1,17 @@
-import { Router } from 'express';
+import config from '../config';
+import { Router, Request, Response } from 'express';
+import { BasketItemDTO } from '../';
+import { getBasket} from '../basket';
+
 export const router = Router();
 
-// Getting basket
-router.get('/', (req, res) => {
-  console.log('basket => GET /');
+router.get('/', async (req: Request, res: Response) => {
+  console.log('GET /basket');
 
   try {
-    const values = [
-      {val: 30.05},
-      {val: 30.83},
-      {val: 30.71}
-    ];
-    res.json(values)
+    const { BASKET_URL } = config;
+    const basket: BasketItemDTO[] = await getBasket(BASKET_URL);
+    res.json(basket)
   } catch (err) {
     res.status(500).json({ message: err.message })
   }
