@@ -8,8 +8,8 @@ export const router = Router();
 router.get('/', async (req: Request, res: Response) => {
 
   try {
-    const { BASKET_URL } = config;
-    const basket: BasketItemDTO[] = await getBasket(BASKET_URL);
+    const { basket_url } = config;
+    const basket: BasketItemDTO[] = await getBasket(basket_url);
     console.log(`GET => ${basket.length} items`);
     res.json(basket)
   } catch (err) {
