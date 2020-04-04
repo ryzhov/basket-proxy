@@ -2,10 +2,9 @@
   "name": "opec-proxy",
   "version": "1.0.0",
   "description": "",
-  "main": "server.ts",
   "scripts": {
     "tsc": "tsc",
-    "start": "ts-node-dev --transpileOnly ./server.ts"
+    "start": "ts-node-dev --transpileOnly ./src/server.ts"
   },
   "author": "ryzhov@uiptel.com",
   "license": "ISC",
@@ -20,7 +19,5 @@
     "nodemon": "^2.0.2",
     "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.8.3"
-  },
-  "typings": "./index.d.ts",
-  "type": "module"
+  }
 }

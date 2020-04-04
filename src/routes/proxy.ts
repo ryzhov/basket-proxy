@@ -1,7 +1,9 @@
 
 import axios, { AxiosResponse} from 'axios';
 import { parse as parseXML } from 'fast-xml-parser';
-import { ListItem, BasketItemDTO } from '.';
+import ListItem from './ListItem';
+import BasketItemDTO from './BasketItemDTO';
+
 
 const normalizer = (list: ListItem[]): BasketItemDTO[] => list.map(
     ({'@_data': data, '@_val': val }: ListItem): BasketItemDTO => ({ timestamp: (new Date(data)).getTime(), value: parseFloat(val)})
