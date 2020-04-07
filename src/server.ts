@@ -2,17 +2,19 @@
 import express, { Express } from 'express';
 import { Server } from 'http';
 import config from './config';
-import { router as basketRouter } from './routes/basket';
+import { basketRouter } from './routes/basketRouter';
+import { configRouter } from './routes/configRouter';
 
-const { port, env, debug, version } = config;
+const { port, env, debug, version, appName } = config;
 const app: Express = express();
 
 app.use(express.json());
+app.use('/', configRouter);
 app.use('/basket', basketRouter);
 
 const server: Server = app.listen(
     port,
-    () => console.log(`server:: started at port => ${port}; env => ${env}; debug => ${debug}; version => ${version}`)
+    () => console.log(`port => ${port}; env => ${env}; debug => ${debug}; app => ${appName}:${version}`)
 );
 
 const exit = (message: string) => {
