@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opec-proxy
+  labels:
+    app: opec-proxy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: opec-proxy
+  template:
+    metadata:
+      labels:
+        app: opec-proxy
+    spec:
+      containers:
+      - name: opec-proxy
+        image: anryzhov/opec-proxy:0.0.1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
