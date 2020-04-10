@@ -1,13 +1,14 @@
+ARG expose_port
 FROM node:alpine
+
+WORKDIR /build
+COPY . .
+RUN npm ci
+RUN npm run build && cp -r dist /app
+RUN rm -rf * .??*
 
 ENV NODE_ENV=production
 WORKDIR /app
-COPY . .
 RUN npm ci
-RUN npm run build
-RUN rm -rf * .??*
-
-WORKDIR /app/dist
-RUN npm ci --only=production
-EXPOSE $EXPOSE_PORT
+EXPOSE ${expose_port}
 CMD [ "node", "-r", "dotenv/config", "server.js" ]

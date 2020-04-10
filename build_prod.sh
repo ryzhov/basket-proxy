@@ -8,8 +8,8 @@ DOCKER_FILE=.docker/prod/Dockerfile
 
 PRODUCTION_IMAGE_NAME=${REGISTRY}/${APP_NAME}:${APP_VERSION:-local}
 
-echo "build production image => ${PRODUCTION_IMAGE_NAME}"
-docker build -t ${PRODUCTION_IMAGE_NAME} -f ${DOCKER_FILE} .
+echo "build production image => ${PRODUCTION_IMAGE_NAME} expose_port => ${EXPOSE_PORT}"
+docker build --build-arg expose_port=${EXPOSE_PORT} -t ${PRODUCTION_IMAGE_NAME} -f ${DOCKER_FILE} .
 [ $? != 0 ] && echo "build production image fail, exit." &&  exit 1
 
 if [ ${PUSH_TO_REGISTRY} = "yes" ]; then

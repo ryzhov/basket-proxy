@@ -7,7 +7,7 @@ export default {
     port: parseInt(env.EXPOSE_PORT || '8080', 10),
     env: env.NODE_ENV || 'production',
     get debug() { return this.env !== 'production'; },
-    version: require('../package.json').version,
+    version: env.APP_VERSION || '0.0.0',
     // -- TODO: use command to update hash => 'git rev-parse HEAD'
-    gitHash: env.GIT_HASH || 'unknown',
+    gitHash: env.GIT_HASH || '00000000',
 };
