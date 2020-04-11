@@ -1,6 +1,6 @@
 {
   "name": "opec-proxy",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "OPEC Basket price API Proxy",
   "scripts": {
     "prebuild": "rm -rf dist/*",
