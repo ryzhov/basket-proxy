@@ -1,14 +1,16 @@
 
 import express, { Express } from 'express';
+import cors from 'cors';
 import { Server } from 'http';
 import config from './config';
 import { basketRouter } from './routes/basketRouter';
 import { configRouter } from './routes/configRouter';
 
-const { port, env, debug, version, appName } = config;
+const { port, env, debug, version, appName, origin } = config;
 const app: Express = express();
 
 app.use(express.json());
+app.use(cors({ origin }));
 app.use('/', configRouter);
 app.use('/basket', basketRouter);
 
