@@ -14,7 +14,7 @@ export GIT_HASH=`git rev-parse HEAD`
 export EXPOSE_PORT
 PRODUCTION_IMAGE_NAME=${REGISTRY}/${APP_NAME}:${GIT_HASH:0:16}
 
-echo "build production image => ${PRODUCTION_IMAGE_NAME} GIT_HASH => ${GIT_HASH} EXPOSE_PORT => ${EXPOSE_PORT}"
+echo "build production image => ${PRODUCTION_IMAGE_NAME} EXPOSE_PORT => ${EXPOSE_PORT}"
 docker build --build-arg EXPOSE_PORT --build-arg GIT_HASH -t ${PRODUCTION_IMAGE_NAME} -f ${DOCKER_FILE} .
 [ $? != 0 ] && echo "build production image fail, exit." &&  exit 1
 
