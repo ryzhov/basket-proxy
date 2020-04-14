@@ -3,13 +3,19 @@
 . .env
 
 PUSH_TO_REGISTRY=no
-APP_VERSION=`node -pe "require('./package.json').version"`
 DOCKER_FILE=.docker/prod/Dockerfile
+BUILDER_IMAGE_NAME=${APP_NAME}.builder:${APP_VERSION:-local}
 
-PRODUCTION_IMAGE_NAME=${REGISTRY}/${APP_NAME}:${APP_VERSION:-local}
+echo "version => ${APP_VERSION}, build image => ${BUILDER_IMAGE_NAME}"
+docker build --target builder -t ${BUILDER_IMAGE_NAME} -f ${DOCKER_FILE} .
+[ $? != 0 ] && echo "build image with target \"builder\" fail, exit." &&  exit 1
 
-echo "build production image => ${PRODUCTION_IMAGE_NAME} expose_port => ${EXPOSE_PORT}"
-docker build --build-arg expose_port=${EXPOSE_PORT} -t ${PRODUCTION_IMAGE_NAME} -f ${DOCKER_FILE} .
+export GIT_HASH=`git rev-parse HEAD`
+export EXPOSE_PORT
+PRODUCTION_IMAGE_NAME=${REGISTRY}/${APP_NAME}:${GIT_HASH:0:16}
+
+echo "build production image => ${PRODUCTION_IMAGE_NAME} GIT_HASH => ${GIT_HASH} EXPOSE_PORT => ${EXPOSE_PORT}"
+docker build --build-arg EXPOSE_PORT --build-arg GIT_HASH -t ${PRODUCTION_IMAGE_NAME} -f ${DOCKER_FILE} .
 [ $? != 0 ] && echo "build production image fail, exit." &&  exit 1
 
 if [ ${PUSH_TO_REGISTRY} = "yes" ]; then

@@ -2,7 +2,6 @@
 
 . .env
 
-APP_VERSION=`node -pe "require('./package.json').version"`
 LOCAL_PORT=127.0.0.1:3000
 CONTAINER_NAME=${APP_NAME}.prod_v${APP_VERSION}
 

@@ -1,14 +1,25 @@
-ARG expose_port
-FROM node:alpine
+# ---- BUILD IMAGE ----
+FROM node:alpine AS builder
 
-WORKDIR /build
+WORKDIR /app
 COPY . .
 RUN npm ci
-RUN npm run build && cp -r dist /app
-RUN rm -rf * .??*
+RUN npm run build
 
+# ---- PROD IMAGE ----
+FROM node:alpine
+
+ARG EXPOSE_PORT
+ARG GIT_HASH
 ENV NODE_ENV=production
-WORKDIR /app
-RUN npm ci
+
+WORKDIR /var/www
+
+COPY --from=builder /app/package.json /app/package-lock.json /app/.env ./
+COPY --from=builder /app/dist ./dist
+
+RUN echo "GIT_HASH=${GIT_HASH}" >> .env && npm ci
+
 EXPOSE ${expose_port}
-CMD [ "node", "-r", "dotenv/config", "server.js" ]
+
+CMD [ "npm", "run", "start" ]
