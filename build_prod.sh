@@ -2,7 +2,7 @@
 
 . .env
 
-PUSH_TO_REGISTRY=no
+PUSH_TO_REGISTRY=yes
 DOCKER_FILE=.docker/prod/Dockerfile
 BUILDER_IMAGE_NAME=${APP_NAME}.builder:${APP_VERSION:-local}
 

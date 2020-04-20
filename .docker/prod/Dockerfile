@@ -16,10 +16,11 @@ ENV NODE_ENV=production
 WORKDIR /var/www
 
 COPY --from=builder /app/package.json /app/package-lock.json /app/.env ./
+COPY --from=builder /app/.env.prod ./.env
 COPY --from=builder /app/dist ./dist
 
 RUN echo "GIT_HASH=${GIT_HASH}" >> .env && npm ci
 
-EXPOSE ${expose_port}
+EXPOSE ${EXPOSE_PORT}
 
 CMD [ "npm", "run", "start" ]
