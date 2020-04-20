@@ -1,13 +1,14 @@
 import { hostname } from 'os';
 const { env } = process;
+const PRODUCTION = 'production';
 
 export default {
     host: hostname(),
     app: env.APP_NAME || 'undefined',
     basketUrl: env.BASKET_URL || 'http://localhost',
     port: parseInt(env.EXPOSE_PORT || '80', 10),
-    env: env.NODE_ENV || 'production',
-    get debug() { return this.env !== 'production'; },
+    env: env.NODE_ENV || PRODUCTION,
+    get debug() { return this.env !== PRODUCTION; },
     version: env.APP_VERSION || '0.0.0',
     gitHash: env.GIT_HASH || '00000000',
     origin: ['http://uiptel.com', 'http://172.25.0.2:8080'],
