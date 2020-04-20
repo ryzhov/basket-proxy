@@ -1,5 +1,5 @@
 
-import axios, { AxiosResponse} from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { parse as parseXML } from 'fast-xml-parser';
 import ListItem from './ListItem';
 import BasketItemDTO from './BasketItemDTO';

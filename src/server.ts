@@ -6,7 +6,7 @@ import config from './config';
 import { basketRouter } from './routes/basketRouter';
 import { configRouter } from './routes/configRouter';
 
-const { port, env, debug, version, appName, origin } = config;
+const { port, origin } = config;
 const app: Express = express();
 
 app.use(express.json());
@@ -14,10 +14,7 @@ app.use(cors({ origin }));
 app.use('/', configRouter);
 app.use('/basket', basketRouter);
 
-const server: Server = app.listen(
-    port,
-    () => console.log(`port => ${port}; env => ${env}; debug => ${debug}; app => ${appName}:${version}`)
-);
+const server: Server = app.listen(port, () => console.dir(config));
 
 const exit = (message: string) => {
     console.log(message);
