@@ -6,6 +6,7 @@ PUSH_TO_REGISTRY=yes
 DEPLOY=yes
 DOCKER_FILE=.docker/prod/Dockerfile
 BUILDER_IMAGE_NAME=${APP_NAME}.builder:${APP_VERSION:-local}
+REGISTRY=anryzhov
 DEPLOYMENT=opec-proxy
 CONTAINER=opec-proxy
 
