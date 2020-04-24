@@ -1,5 +1,6 @@
 
 import express, { Express } from 'express';
+import morgan from 'morgan';
 import cors from 'cors';
 import { Server } from 'http';
 import config from './config';
@@ -9,6 +10,7 @@ import { configRouter } from './routes/configRouter';
 const { port, origin } = config;
 const app: Express = express();
 
+app.use(morgan('combined'));
 app.use(express.json());
 app.use(cors({ origin }));
 app.use('/', configRouter);
