@@ -10,7 +10,7 @@ let basket: BasketItemDTO[];
 
 const fetch = async () => {
     basket = await getBasket(basketUrl);
-    console.log('fetch basket at => ', new Date(), `, ${basket.length} items`);
+    console.log(`fetch basket date => ${new Date()}, ${basket.length} items`);
 };
 
 setImmediate(fetch);
